@@ -1,6 +1,5 @@
 {
   "name": "fastspex",
-  "version": "0.1.0",
   "description": "A lean, spec-driven development toolkit for Claude Code. Clear specs, no scope-creep.",
   "author": {
     "name": "hddat2k4"
