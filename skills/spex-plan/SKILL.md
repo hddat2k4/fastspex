@@ -12,7 +12,7 @@ Decide HOW to build the approved spec — lean overview, depth in linked detail 
 
 ## Flow
 1. **Read** spec.md + memory/ (project, tech, constitution).
-2. **Distill docs** for libs this feature touches (lazy): ensure tech-docs/ exists; if missing → Context7 → ContextHub → WebSearch → save digest.
+2. **Distill docs** for libs this feature touches (lazy): if a digest is missing → resolve via `docs_source` (Context7 · ContextHub=**spex-contexthub** · WebSearch; fall back through the rest if it fails, else save a pointer) → save digest.
 3. **Draft plan.md** (template, 2-tier): Approach · Changes (create/modify/delete) · Error handling · Testing · Docs used · Details(links). Heavy topics (data model, contracts, decisions, architecture+Mermaid) → `details/<file>.md`, linked only. Create a detail file ONLY when it would bloat plan.md.
 4. **Scope-check + Constitution Check**: the plan adds nothing beyond the spec and violates no constitution rule. Flag and ask on conflict.
 5. **Save** plan.md (status: draft).

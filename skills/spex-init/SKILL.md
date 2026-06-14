@@ -13,10 +13,11 @@ Set up the persistent context a spec-driven workflow needs. **Core principle: ca
 ## Flow
 1. **Detect mode.** Code/manifests/.git present → brownfield; empty → greenfield. Confirm with the user (1 question).
 2. **Scaffold (do not clobber).** If `spex/` exists → stop and offer update / re-init / abort. Else create:
-   `spex/memory/`, `spex/memory/tech-docs/`, `spex/specs/`, and `spex/config.yml` (fastspex:1, mode, created, self_review: true).
+   `spex/memory/`, `spex/memory/tech-docs/`, `spex/specs/`, and `spex/config.yml` (fastspex:1, mode, created, self_review: true, docs_source).
 3. **Gather inputs, then offer parallel.** Subagents CANNOT ask the user, so collect everything the generators need first:
    - greenfield: ask the lean question sets up front — project (purpose+who · 3–5 MVP features · out of scope) · tech (intended stack) · constitution (language/style · test policy · non-negotiables).
    - brownfield: nothing to ask yet (generators read the repo), but parse manifests and **confirm the short CORE-libs set** here (the one human-in-loop step tech needs).
+   - both modes: ask the **doc source** for distillation — *Context7 (MCP) · ContextHub (bundled, no MCP) · WebSearch* → save to `config.yml: docs_source`. Any choice still falls back if it fails.
    Then ask ONE confirm: *"Launch 3 agents in parallel to write project.md, tech.md, constitution.md? [y/N]"*
 4. **Generate (see File specs §A–§C).**
    - **Confirm = yes →** dispatch three subagents concurrently (one message, multiple Task calls): §A→project.md, §B→tech.md, §C→constitution.md. Give each the mode + gathered inputs + its file path + the template. Every agent: write ONLY its own file, NEVER ask the user, return a 2–3 bullet summary. Distinct files → safe in parallel.
@@ -26,7 +27,7 @@ Set up the persistent context a spec-driven workflow needs. **Core principle: ca
 
 ## File specs (each = one agent's job, or one sequential step)
 - **§A project.md** (template). greenfield: gathered answers → propose an annotated tree from the stack. brownfield: shallow `tree` (depth 2, ignore node_modules/.git/dist) → annotated tree + naming + README, each marked "inferred from …".
-- **§B tech.md** (template). greenfield: stated stack → resolve-library-id per lib → store ID+version. brownfield: parse manifests (package.json/requirements.txt/go.mod/pom.xml…) → resolve IDs. Then **eager-distill the CORE libs confirmed in step 3** → tech-docs/. Non-core stay pointers (lazy).
+- **§B tech.md** (template). Stack from stated input (greenfield) or parsed manifests (package.json/requirements.txt/go.mod/pom.xml…) (brownfield); record name+version (resolve the Context7 ID too when that source is available). **Eager-distill the CORE libs (step 3)** honoring `docs_source`: Context7 · **ContextHub = run spex-contexthub** · WebSearch — use the chosen source, fall back through the rest if it fails, and if none work save a **pointer (name+version) + note "docs not distilled"** (never block). Non-core stay pointers (lazy).
 - **§C constitution.md** (template). greenfield: gathered answers → 2–5 principles, each name + verifiable rule + one-line rationale. brownfield: infer from lint config/CI/CONTRIBUTING/README, marked with sources. ALWAYS keep the "Scope Discipline" section verbatim.
 
 ## Self-review
