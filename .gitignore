@@ -1,0 +1,17 @@
+# Local Claude Code plugin cache / state
+.claude/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node / Python artifacts if any
+node_modules/
+__pycache__/
+*.pyc
