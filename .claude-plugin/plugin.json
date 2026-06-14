@@ -1,0 +1,17 @@
+{
+  "name": "fastspex",
+  "version": "0.1.0",
+  "description": "A lean, spec-driven development toolkit for Claude Code. Clear specs, no scope-creep.",
+  "author": {
+    "name": "hddat2k4"
+  },
+  "homepage": "https://github.com/hddat2k4/fastspex",
+  "repository": "https://github.com/hddat2k4/fastspex",
+  "keywords": [
+    "spec-driven",
+    "tdd",
+    "planning",
+    "workflow",
+    "claude-code"
+  ]
+}

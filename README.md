@@ -3,17 +3,36 @@ A lean, spec-driven development toolkit for Claude Code. Clear specs, no scope-c
 
 ## Install
 
-### As a Claude Code plugin (recommended)
+### Any agent — Codex, Cursor, Gemini, Copilot… (recommended)
+
+Cross-tool install via the open [`skills`](https://github.com/vercel-labs/skills) CLI (70+ agents). It reads this repo's `skills/` folder and lets you pick a target:
 
 ```bash
-claude plugin install https://github.com/YOUR_USERNAME/fastspex
+# All skills (auto-detects your agent)
+npx skills add https://github.com/hddat2k4/fastspex
+
+# A single skill
+npx skills add https://github.com/hddat2k4/fastspex --skill spex-init
+
+# Pick a specific agent and install globally
+npx skills add https://github.com/hddat2k4/fastspex --agent codex --global
 ```
 
-Or clone and install locally:
+### Claude Code (plugin)
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/fastspex /tmp/fastspex
-claude plugin install /tmp/fastspex
+# 1. Add this repo as a marketplace
+claude plugin marketplace add hddat2k4/fastspex
+
+# 2. Install the plugin from it
+claude plugin install fastspex@fastspex
+```
+
+Or inside a Claude Code session:
+
+```
+/plugin marketplace add hddat2k4/fastspex
+/plugin install fastspex@fastspex
 ```
 
 ### Manual install

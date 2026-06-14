@@ -1,0 +1,19 @@
+{
+  "name": "fastspex",
+  "owner": {
+    "name": "hddat2k4"
+  },
+  "metadata": {
+    "description": "Marketplace for the Fastspex spec-driven development toolkit."
+  },
+  "plugins": [
+    {
+      "name": "fastspex",
+      "source": "./",
+      "description": "A lean, spec-driven development toolkit for Claude Code. Clear specs, no scope-creep.",
+      "author": {
+        "name": "hddat2k4"
+      }
+    }
+  ]
+}
