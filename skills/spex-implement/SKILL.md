@@ -12,7 +12,25 @@ Build exactly what the tasks say. **Core principle (scope-guard): code only what
 
 ## Flow
 1. **Read** spec + plan + tasks + memory (constitution, tech-docs/).
-2. **Execute tasks** in order, respecting dependencies. Default sequential. If the user opts in, run `[P]` (independent) tasks in parallel via sub-agents.
+2. **Confirm execution mode with AskUserQuestion.** If tasks.md contains one or more `[P]` (parallel-safe) markers:
+   ```json
+   {
+     "questions": [
+       {
+         "question": "This task list has {N} independent [P] task(s). Run them in parallel?",
+         "header": "Execution mode",
+         "multiSelect": false,
+         "options": [
+           { "label": "Yes, run [P] tasks in parallel", "description": "Faster; each [P] task gets its own agent" },
+           { "label": "No, run everything sequentially", "description": "Slower, uses fewer agents, simpler to follow" }
+         ]
+       }
+     ]
+   }
+   ```
+   - If **yes**: dispatch each `[P]` task to a subagent concurrently; keep dependent tasks sequential. Subagents CANNOT ask the user; give them full context (spec, plan, constitution, relevant tech-docs, task snippet).
+   - If **no**: run all tasks sequentially.
+   - If no `[P]` markers exist, default to sequential and skip the question.
 3. **Per task (TDD):** write the failing test → run it (see it fail) → minimal implementation → run tests (pass) → tick `[x]`.
 4. **Scope-guard:** implement only the task/`_Req:`. No "while I'm here" refactors, no extra options.
 5. **Docs:** use tech-docs/; if a needed digest is missing → resolve via `docs_source` (Context7 · ContextHub=**spex-contexthub** · WebSearch; fall back through the rest if it fails, else pointer) → save.

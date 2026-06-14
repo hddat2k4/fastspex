@@ -11,17 +11,69 @@ Set up the persistent context a spec-driven workflow needs. **Core principle: ca
 - Starting Fastspex in a repo. NOT for editing context later — use spex-update for that.
 
 ## Flow
-1. **Detect mode.** Code/manifests/.git present → brownfield; empty → greenfield. Confirm with the user (1 question).
+1. **Auto-detect mode.** Inspect the repo before asking anything:
+   - **brownfield** if any of: manifest files (`package.json`, `requirements.txt`, `go.mod`, `pom.xml`, `build.gradle`, `Cargo.toml`, `Gemfile`, `composer.json`, …), source folders (`src/`, `app/`, `lib/`, `packages/`, `tests/`, …), or a `.git/` directory with commits.
+   - **greenfield** otherwise (empty repo, only README, no manifests/source).
+   - Use `AskUserQuestion` to confirm one choice:
+     ```json
+     {
+       "questions": [
+         {
+           "question": "I detected this as a {mode} project. Is that correct?",
+           "header": "Project mode",
+           "multiSelect": false,
+           "options": [
+             { "label": "Yes, proceed as detected", "description": "Continue with {mode}" },
+             { "label": "No, switch to greenfield", "description": "Empty/new project" },
+             { "label": "No, switch to brownfield", "description": "Existing codebase" }
+           ]
+         }
+       ]
+     }
+     ```
+   - Save final mode to `spex/config.yml` (`mode: greenfield | brownfield`).
 2. **Scaffold (do not clobber).** If `spex/` exists → stop and offer update / re-init / abort. Else create:
-   `spex/memory/`, `spex/memory/tech-docs/`, `spex/specs/`, and `spex/config.yml` (fastspex:1, mode, created, self_review: true, docs_source).
+   `spex/memory/`, `spex/memory/tech-docs/`, `spex/specs/`, and `spex/config.yml` (`fastspex:1`, `mode`, `created`, `self_review: true`, `docs_source`).
 3. **Gather inputs, then offer parallel.** Subagents CANNOT ask the user, so collect everything the generators need first:
    - greenfield: ask the lean question sets up front — project (purpose+who · 3–5 MVP features · out of scope) · tech (intended stack) · constitution (language/style · test policy · non-negotiables).
    - brownfield: nothing to ask yet (generators read the repo), but parse manifests and **confirm the short CORE-libs set** here (the one human-in-loop step tech needs).
-   - both modes: ask the **doc source** for distillation — *Context7 (MCP) · ContextHub (bundled, no MCP) · WebSearch* → save to `config.yml: docs_source`. Any choice still falls back if it fails.
-   Then ask ONE confirm: *"Launch 3 agents in parallel to write project.md, tech.md, constitution.md? [y/N]"*
+   - both modes: ask the **doc source** for distillation with `AskUserQuestion`:
+     ```json
+     {
+       "questions": [
+         {
+           "question": "Choose the primary doc source for tech library digests.",
+           "header": "Doc source",
+           "multiSelect": false,
+           "options": [
+             { "label": "Context7 (MCP)", "description": "Most accurate; requires the Context7 MCP server" },
+             { "label": "ContextHub (bundled)", "description": "No MCP required; runs spex-contexthub locally" },
+             { "label": "WebSearch / WebFetch", "description": "Broadest reach, lower precision" }
+           ]
+         }
+       ]
+     }
+     ```
+     Save choice to `config.yml: docs_source`. Any choice still falls back if it fails.
+   - Then ask ONE `AskUserQuestion` confirm for parallel generation:
+     ```json
+     {
+       "questions": [
+         {
+           "question": "Launch 3 agents in parallel to write project.md, tech.md, and constitution.md?",
+           "header": "Generate context files",
+           "multiSelect": false,
+           "options": [
+             { "label": "Yes, run in parallel (recommended)", "description": "One agent per file, faster" },
+             { "label": "No, run sequentially", "description": "Slower, uses fewer agents" }
+           ]
+         }
+       ]
+     }
+     ```
 4. **Generate (see File specs §A–§C).**
-   - **Confirm = yes →** dispatch three subagents concurrently (one message, multiple Task calls): §A→project.md, §B→tech.md, §C→constitution.md. Give each the mode + gathered inputs + its file path + the template. Every agent: write ONLY its own file, NEVER ask the user, return a 2–3 bullet summary. Distinct files → safe in parallel.
-   - **Confirm = no →** run §A, §B, §C yourself, sequentially. Same output.
+   - **Parallel = yes →** dispatch three subagents concurrently (one message, multiple Task calls): §A→project.md, §B→tech.md, §C→constitution.md. Give each the mode + gathered inputs + its file path + the template. Every agent: write ONLY its own file, NEVER ask the user, return a 2–3 bullet summary. Distinct files → safe in parallel.
+   - **Parallel = no →** run §A, §B, §C yourself, sequentially. Same output.
 5. **Brief & handoff (NO gate).** Print 2–3 bullets per file (what was captured), then:
    "Review here: `spex/memory/`. To change anything: `/spex:update`. When ready: `/spex:spec`." Do not block.
 
@@ -42,4 +94,4 @@ If `spex/config.yml → self_review: true`: check no placeholders left; principl
 | "Pre-download all docs now" | Only eager-distill CORE libs; the rest are pointers. |
 | "They probably want strict mode" | Don't guess. Ask, or infer from real config. |
 | "Let a subagent ask the user" | It can't. Gather every input in step 3, before fan-out. |
-| "Parallel is better, skip the confirm" | Always offer the [y/N]. Sequential is the fallback, not a bug. |
+| "Parallel is better, skip the confirm" | Always offer the choice. Sequential is the fallback, not a bug. |
