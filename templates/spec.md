@@ -4,19 +4,42 @@ status: draft        # draft | approved
 ---
 # Spec: [FEATURE_NAME]
 
-## Why
-[1–2 sentences: problem & why now.]
+## Introduction
+[Prose: what this builds & why; which files/modules it touches (brownfield) or the overall
+shape (greenfield); what is explicitly NOT changed; dependencies on other specs.]
 
-## What changes
-- [behavior/capability ADDED · MODIFIED · REMOVED — high level, NOT code]
-- Mark **BREAKING** if it changes existing behavior.
+## Glossary   (optional — include when domain terms need pinning)
+- **[Term]** — [definition].
 
 ## Requirements
-### R1. [Name] — [Must|Should|Could]
-As a <role>, I want <goal>, so that <value>.
-- WHEN <condition> THE SYSTEM SHALL <behavior>.
-- IF <error precondition> THEN THE SYSTEM SHALL <response>.
-Out of scope: <what R1 does NOT cover; "—" if none>.
 
-## Non-goals   (optional — only if there's a meaningful overall boundary)
+### Requirement 1: [Short Title] — [Must | Should | Could]
+**User Story:** As a [role], I want [capability], so that [benefit].
+
+#### Acceptance Criteria
+<!-- EARS, NUMBERED → criterion IDs read 1.1, 1.2 (restart per requirement). Patterns:
+  Event-driven : WHEN [trigger], THE SYSTEM SHALL [response]
+  Ubiquitous   : THE SYSTEM SHALL [response]
+  State-driven : WHILE [state], THE SYSTEM SHALL [response]
+  Unwanted     : IF [condition], THEN THE SYSTEM SHALL [response]
+  Optional     : WHERE [feature included], THE SYSTEM SHALL [response]
+  Precondition : GIVEN [precondition] WHEN [event] THEN [outcome] -->
+1. WHEN [trigger], THE SYSTEM SHALL [response].
+2. THE SYSTEM SHALL [response].
+3. IF [error condition], THEN THE SYSTEM SHALL [error handling].
+
+**Out of scope:** [what Requirement 1 does NOT cover; "—" if none].
+
+### Requirement 2: [Short Title] — [Must | Should | Could]
+**User Story:** As a [role], I want [capability], so that [benefit].
+
+#### Acceptance Criteria
+1. THE SYSTEM SHALL [behavior].
+
+**Out of scope:** —
+
+## Non-goals   (optional — overall boundary)
 - [explicitly NOT building]
+
+## Business Rules (Restated)   (optional — when pre-existing BR IDs exist)
+- **BR-XXX-001** — [rule]. Implemented in Requirement N.

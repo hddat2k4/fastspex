@@ -1,29 +1,55 @@
 ---
 name: spex-tasks
-description: Break an approved plan into an independent, traceable task checklist (tasks.md). No approval gate.
+description: Break an approved design into a granular, traceable task checklist (tasks.md) — two-level decimal checkboxes, per-sub-task granular requirement IDs, kept parallel-safe with [P]. Requires approval before /spex:implement.
 ---
 # Fastspex: Tasks
 
 ## Overview
-Decompose the plan into a checklist. **Core principle: tasks are independent and each traces to a requirement.**
+Convert the design into small, test-driven coding steps. **Core principle: each sub-task is independent, ends wired-in (no orphaned code), and traces to granular requirement criterion IDs.**
 
 ## When to use
-- After plan.md is `approved`.
+- After design.md is `approved`.
 
 ## Flow
-1. **Read** spec + plan (+ details/).
-2. **Decompose** into ordered tasks in tasks.md; each tagged `_Req: Rx_` and tied to a plan "Change".
-3. **Granularity (hybrid):** default coarse (1 task = 1 logical unit, ~≤30 min, TDD implied); split into 2-level sub-tasks (T1.1) only when complex.
-4. **Independence:** make each task self-contained; never let two tasks edit the same file; group files-that-change-together. Mark `[P]` for parallel-safe tasks; add a dependency ("after T1") only when unavoidable.
-5. **TDD** per constitution test policy. Right-size for small features.
-6. **Save** tasks.md (status: draft) → ready for /spex:implement.
+1. **Read** spec + design (+ details/ + tech-docs/).
+2. **Decompose** into the tasks.md template:
+   - Two-level decimal checkboxes ONLY: `- [ ] N` (group) then `- [ ] N.M` (sub-task). Max two levels; further detail = plain bullets.
+   - Each sub-task `N.M` ends with its OWN `_Requirements: a.b, c.d_` citing **GRANULAR criterion IDs** from the spec (e.g. `1.1`, `7.6`) — never whole requirements (`1`), never one shared line per group.
+   - Order: schema → services → APIs → UI → integration → tests.
+   - File paths in backticks. States `[ ]`/`[x]`/`[/]`; deviation/result notes in `>` blockquotes.
+   - Coding tasks only (write/modify/test code). EXCLUDE deploy, UAT, performance-metrics gathering, manual e2e, training, marketing. An optional terminal `## N. Out of scope (capture only)` group MAY list excluded items as plain bullets.
+3. **Independence + parallelism:** make each sub-task self-contained; never let two tasks edit the same file at once; group files-that-change-together. Mark `[P]` on each parallel-safe sub-task; add `(after N.M)` only when a dependency is unavoidable.
+4. **TDD** per constitution test policy. Right-size for small features.
+5. **Save** tasks.md (status: draft).
+6. **HARD-GATE.** Prefer `AskUserQuestion`; a typed token (`approved`/`looks good`/`yes`/`lgtm`/`ok proceed`) is also accepted:
+   ```json
+   {
+     "questions": [
+       {
+         "question": "Approve these tasks and proceed to /spex:implement?",
+         "header": "Tasks approval",
+         "multiSelect": false,
+         "options": [
+           { "label": "Approve", "description": "Set status: approved and continue" },
+           { "label": "Request changes", "description": "Describe what to change, then revise" },
+           { "label": "Reject and stop", "description": "Keep as draft, do not implement" }
+         ]
+       }
+     ]
+   }
+   ```
+   - On **Approve** (button or token): set tasks.md status to `approved` and stop. The next command is `/spex:implement`.
+   - On **Request changes**: edit tasks.md, re-save as draft, re-run the gate.
+   - On **Reject**: keep status as `draft` and stop. Do NOT implement in this phase.
 
 ## Self-review
-If enabled: every requirement maps to ≥1 task; no orphan task beyond spec/plan; dependencies minimal and correct. Fix inline.
+If enabled: every requirement criterion maps to ≥1 sub-task; each `N.M` has its OWN granular `_Requirements:_`; no orphan task beyond spec/design; no two parallel tasks touch the same file; dependencies minimal and correct. Fix inline.
 
 ## Red flags — STOP if you think
 | Thought | Reality |
 |---|---|
-| "One giant task is simpler" | Split by responsibility so tasks stay independent. |
-| "Add a task to clean things up" | Not in the plan → don't. |
+| "One giant task is simpler" | Split into N.M sub-tasks by responsibility so they stay independent. |
+| "Cite the whole requirement (R1) is fine" | Cite granular IDs (1.1, 1.6). That's the locked rule. |
+| "Add a task to clean things up" | Not in the design → don't. |
 | "These two tasks can share edits to file X" | Merge them or sequence them — never parallel-edit one file. |
+| "Implement it now while I'm here" | Tasks phase only writes tasks.md. Implementation is /spex:implement. |
