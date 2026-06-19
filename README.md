@@ -44,10 +44,11 @@ Copy `skills/spex-*` into your skills directory:
 ## Use
 1. `/spex:init` — set up `spex/` context (greenfield or brownfield).
 2. `/spex:spec` — write a feature spec (approval required).
-3. `/spex:plan` — technical plan (approval required).
-4. `/spex:tasks` — break into an independent task checklist.
+3. `/spex:design` — technical design; core inline, heavy detail in `details/` (approval required).
+4. `/spex:tasks` — break into a granular, traceable task checklist (approval required).
 5. `/spex:implement` — build with TDD + scope-guard.
-- `/spex:update` — edit context/config anytime.
+
+To change context after init, edit the files in `spex/memory/` directly.
 
 ## Principles
-Story+EARS specs · per-requirement "Out of scope" · HARD-GATE at spec & plan · self-review (toggle in `spex/config.yml`) · docs via Context7→ContextHub→WebSearch · YAGNI everywhere.
+Story + numbered EARS specs · per-requirement "Out of scope" · HARD-GATE at spec, design & tasks · granular requirement tracing · self-review (toggle in `spex/config.yml`) · docs via Context7→WebSearch · YAGNI everywhere.
