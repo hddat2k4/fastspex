@@ -23,4 +23,15 @@ assert_eq "$([ -d "$root/spex/specs/003-second-thing" ] && echo yes)" "yes" "rep
 # missing description → exit 1
 assert_exit 1 "bash '$SCRIPT' --json"
 
+# --- template path: new-feature copies spex/templates/spec.md when present ---
+root2="$(make_fixture)"
+mkdir -p "$root2/spex/templates"
+printf -- '---\nfeature: <name>\nstatus: draft        # draft | approved\n---\n# Spec: [FEATURE_NAME]\n\n## Introduction\nTEMPLATE_BODY_MARKER\n' > "$root2/spex/templates/spec.md"
+cd "$root2"
+bash "$SCRIPT" "with template" >/dev/null
+sp="$root2/spex/specs/001-with-template/spec.md"
+assert_eq "$(grep -c 'TEMPLATE_BODY_MARKER' "$sp")" "1" "spec uses project template body"
+assert_eq "$(frontmatter_only_status "$sp")" "draft" "templated spec status draft"
+assert_eq "$(awk -F': ' '/^feature:/{print $2; exit}' "$sp" | tr -d '\r')" "001-with-template" "templated spec feature set"
+
 summary

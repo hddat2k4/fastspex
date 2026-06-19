@@ -34,7 +34,13 @@ slug="$(printf '%s' "$slug" | awk -F- '{n=(NF>5?5:NF); for(i=1;i<=n;i++) printf 
 feat="${num}-${slug}"; dir="$SPECS/$feat"
 [ -d "$dir" ] && { echo "error: $feat already exists" >&2; exit 1; }
 mkdir -p "$dir"
-printf -- '---\nfeature: %s\nstatus: draft\n---\n' "$feat" > "$dir/spec.md"
+# Use the project-local spec template when init materialized it; else a frontmatter stub.
+TPL="$ROOT/spex/templates/spec.md"
+if [ -f "$TPL" ]; then
+  sed -e "s|^feature:.*|feature: $feat|" -e "s|^status:.*|status: draft|" "$TPL" > "$dir/spec.md"
+else
+  printf -- '---\nfeature: %s\nstatus: draft\n---\n' "$feat" > "$dir/spec.md"
+fi
 printf '%s\n' "$feat" > "$ROOT/spex/active-feature"
 
 if [ "$BRANCH" -eq 1 ] && command -v git >/dev/null 2>&1; then
