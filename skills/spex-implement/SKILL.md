@@ -11,6 +11,12 @@ Build exactly what the tasks say. **Core principle (scope-guard): code only what
 - After tasks.md exists.
 
 ## Flow
+0. **Locate & gate.** If `spex/scripts/` exists and a shell is available, run
+   `bash spex/scripts/bash/check.sh --json --phase implement` (POSIX) or
+   `powershell -File spex/scripts/powershell/check.ps1 --json --phase implement` (Windows); if
+   it exits non-zero, STOP and report `blocking`. Use its `feature_dir` + `available_docs`.
+   Otherwise resolve the active feature inline (active-feature file → git branch `NNN-*` →
+   single specs dir → newest) and confirm `tasks.md` is `status: approved`; if not, stop.
 1. **Read** spec + design + tasks + memory (product, tech, structure, constitution, tech-docs/). Always read all three spec/design/tasks before executing — executing without them leads to wrong implementations.
 2. **Confirm execution mode with AskUserQuestion.** If tasks.md contains one or more `[P]` (parallel-safe) markers:
    ```json
@@ -35,7 +41,7 @@ Build exactly what the tasks say. **Core principle (scope-guard): code only what
 4. **Scope-guard:** implement only the task and the granular criteria its `_Requirements: N.M_` cites (look them up in spec.md). No "while I'm here" refactors, no extra options.
 5. **Docs:** use tech-docs/; if a needed digest is missing → resolve via `docs_source` (Context7 · WebSearch; fall back if it fails, else pointer) → save.
 6. **Self-review + verify:** if enabled, confirm code matches task/spec with nothing extra; then RUN the tests and read output before claiming anything passes.
-7. Feature done when all tasks are `[x]`.
+7. Feature done when all tasks are `[x]`. **→ Next: feature complete — start the next with `/spex:spec`.**
 
 ## Red flags — STOP if you think
 | Thought | Reality |

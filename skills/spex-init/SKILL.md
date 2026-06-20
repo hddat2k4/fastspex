@@ -80,7 +80,7 @@ Set up the persistent context (steering) a spec-driven workflow needs, stored un
    - **Parallel = yes →** dispatch four subagents concurrently (one message, multiple Task calls): §A→product.md, §B→tech.md, §C→structure.md, §D→constitution.md. Give each the mode + gathered inputs + its file path + its template (`spex/templates/<file>.md`, materialized in step 2b). Every agent: write ONLY its own file, NEVER ask the user, return a 2–3 bullet summary. Distinct files → safe in parallel.
    - **Parallel = no →** run §A–§D yourself, sequentially. Same output.
 5. **Brief & handoff (NO gate).** Print 2–3 bullets per file (what was captured), then:
-   "Review here: `spex/memory/`. To change anything: edit the files directly. When ready: `/spex:spec`." Do not block.
+   "Review here: `spex/memory/`. To change anything: edit the files directly. **→ Next: `/spex:spec`**" Do not block.
 
 ## File specs (each = one agent's job, or one sequential step)
 - **§A product.md** (template). WHAT/WHO, not how. greenfield: gathered answers → Purpose, Target Users, Key Features, Constraints & Non-Goals. brownfield: infer from README / package description / docs, each marked "inferred from …".

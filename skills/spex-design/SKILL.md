@@ -11,6 +11,12 @@ Decide HOW to build the approved spec. **Keep core sections inline; offload heav
 - After a spec is `approved`. If spec.md status ≠ approved → stop.
 
 ## Flow
+0. **Locate & gate.** If `spex/scripts/` exists and a shell is available, run
+   `bash spex/scripts/bash/check.sh --json --phase design` (POSIX) or
+   `powershell -File spex/scripts/powershell/check.ps1 --json --phase design` (Windows); if it
+   exits non-zero, STOP and report `blocking`. Use its `feature_dir` + `available_docs`.
+   Otherwise resolve the active feature inline (active-feature file → git branch `NNN-*` →
+   single specs dir → newest) and confirm `spec.md` is `status: approved`; if not, stop.
 1. **Read** spec.md + memory/ (product, tech, structure, constitution).
 2. **Distill docs** for libs this feature touches (lazy): if a digest is missing → resolve via `docs_source` (Context7 · WebSearch; fall back if it fails, else save a pointer) → save digest to `tech-docs/<lib>.md`.
 3. **Draft design.md** (template). Sections that stay **inline** (always): Overview + Technology Decisions, Out of scope, Architecture / Components and Interfaces (one line each: purpose + file path), Error Handling, and **Testing Strategy (MANDATORY — never push all testing to tasks)**.
@@ -35,7 +41,7 @@ Decide HOW to build the approved spec. **Keep core sections inline; offload heav
      ]
    }
    ```
-   - On **Approve** (button or token): set design.md status to `approved` and stop. The next command is `/spex:tasks`.
+   - On **Approve** (button or token): set design.md status to `approved` and stop. **→ Next: `/spex:tasks`**
    - On **Request changes**: collect the feedback, edit design.md (and any `details/` file), re-save as draft, then re-run the gate.
    - On **Reject**: keep status as `draft` and stop.
    - If requirement gaps surface, offer to return to /spex:spec.

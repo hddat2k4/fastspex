@@ -11,6 +11,12 @@ Convert the design into small, test-driven coding steps. **Core principle: each 
 - After design.md is `approved`.
 
 ## Flow
+0. **Locate & gate.** If `spex/scripts/` exists and a shell is available, run
+   `bash spex/scripts/bash/check.sh --json --phase tasks` (POSIX) or
+   `powershell -File spex/scripts/powershell/check.ps1 --json --phase tasks` (Windows); if it
+   exits non-zero, STOP and report `blocking`. Use its `feature_dir` + `available_docs`.
+   Otherwise resolve the active feature inline (active-feature file → git branch `NNN-*` →
+   single specs dir → newest) and confirm `design.md` is `status: approved`; if not, stop.
 1. **Read** spec + design (+ details/ + tech-docs/).
 2. **Decompose** into the tasks.md template:
    - Two-level decimal checkboxes ONLY: `- [ ] N` (group) then `- [ ] N.M` (sub-task). Max two levels; further detail = plain bullets.
@@ -38,7 +44,7 @@ Convert the design into small, test-driven coding steps. **Core principle: each 
      ]
    }
    ```
-   - On **Approve** (button or token): set tasks.md status to `approved` and stop. The next command is `/spex:implement`.
+   - On **Approve** (button or token): set tasks.md status to `approved` and stop. **→ Next: `/spex:implement`**
    - On **Request changes**: edit tasks.md, re-save as draft, re-run the gate.
    - On **Reject**: keep status as `draft` and stop. Do NOT implement in this phase.
 
