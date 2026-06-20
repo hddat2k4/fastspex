@@ -63,5 +63,12 @@ spex/
   specs/                # one folder per feature (NNN-slug)
 ```
 
+### Optional script layer (Claude Code)
+On Claude Code, `/spex:init` copies tiny helper scripts to `spex/scripts/` (bash + PowerShell)
+that make feature numbering and the spec→design→tasks→implement **gates deterministic**
+(exit-code `check`). Each `/spex:*` step also ends with a `→ Next:` handoff so the workflow
+is self-routing. On any other agent the scripts are simply absent and every command runs the
+same logic inline — no behavior change, no runtime required.
+
 ## Principles
 Story + numbered EARS specs · per-requirement "Out of scope" · HARD-GATE at spec, design & tasks · granular requirement tracing · self-review (toggle in `spex/config.yml`) · docs via Context7→WebSearch · YAGNI everywhere.
