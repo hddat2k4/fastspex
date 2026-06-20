@@ -11,6 +11,15 @@ Turn one feature request into a testable WHAT/WHY spec. **Core principle: every 
 - After /spex:init, to define a single feature/change. One spec = one feature.
 
 ## Flow
+0. **Locate feature & load steering context.** If `spex/scripts/` exists and a shell is
+   available, create the numbered feature dir with the helper:
+   `bash spex/scripts/bash/new-feature.sh --json "<short description>"` (POSIX) or
+   `powershell -File spex/scripts/powershell/new-feature.ps1 --json "<short description>"`
+   (Windows), then write the spec body into the `spec_file` it returns. Otherwise (no scripts)
+   create `spex/specs/<NNN-slug>/spec.md` inline using the numbering rule: `NNN` = highest
+   existing `spex/specs/NNN-*` + 1 (zero-padded to 3); slug = lowercase, non-alnum→`-`, ≤5 words.
+   **Then read `spex/memory/product.md` and `spex/memory/tech.md` (when present)** so every
+   user story traces to the product's Purpose/Users and assumes the real stack — don't invent either.
 1. **Frame** the feature as a single change. Right-size: tiny/clear → a short spec.
 2. **Draft the spec** in the spec.md template:
    - `## Introduction` — what/why, files or modules touched, what is explicitly NOT changed, deps on other specs.
@@ -20,7 +29,7 @@ Turn one feature request into a testable WHAT/WHY spec. **Core principle: every 
    - `## Business Rules (Restated)` (optional) — when pre-existing BR IDs exist, map each to a Requirement.
 3. **Brownfield**: if touching an existing capability, write a DELTA (`## ADDED / ## MODIFIED / ## REMOVED Requirements`); MODIFIED copies the FULL requirement.
 4. **Mark ambiguity** inline with `[NEEDS CLARIFICATION: …]` — **max 3**, prioritized by impact. Do not start a Q&A; draft first, let the user comment.
-5. **Save** `spex/specs/<feature>/spec.md` (status: draft).
+5. **Save** the spec body into the feature dir from Step 0, as `spec.md` (status: draft).
 6. **HARD-GATE.** Prefer `AskUserQuestion`; a typed approval token (`approved` / `looks good` / `yes` / `lgtm` / `ok proceed`, case-insensitive) is ALSO accepted for portability to non-Claude agents. Present the spec for approval or targeted clarification:
    - If there are no `[NEEDS CLARIFICATION]` markers:
      ```json
@@ -57,7 +66,7 @@ Turn one feature request into a testable WHAT/WHY spec. **Core principle: every 
      }
      ```
      If the user chooses "Answer clarifications now", use `AskUserQuestion` for each marker with a free-text option or the relevant choices. Apply answers, remove resolved markers, re-save, then re-present the gate.
-   - On **Approve** (button or token): set spec.md status to `approved` and stop. The next command is `/spex:design`.
+   - On **Approve** (button or token): set spec.md status to `approved` and stop. **→ Next: `/spex:design`**
    - On **Request changes**: collect the feedback, edit the spec, re-save as draft, then re-run the gate.
    - On **Reject**: keep status as `draft` and stop.
 
