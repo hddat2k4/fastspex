@@ -1,5 +1,13 @@
 # Fastspex — Implementation Plan (self-contained)
 
+> ⚠️ **SUPERSEDED (v1 historical record).** This is the original build plan and no longer
+> matches the shipped toolkit. The current toolkit is **`init · spec · design · tasks ·
+> implement`** (no `plan`, no `update`); memory files are **`product.md · tech.md ·
+> structure.md · constitution.md`** (not `project.md`); artifacts are **`spec.md · design.md ·
+> tasks.md`** (not `plan.md`); plus an optional **`spex/scripts/` gate layer** on Claude Code.
+> For the authoritative current behavior see `README.md`, `CLAUDE.md`, each `skills/spex-*/SKILL.md`,
+> and the design doc `docs/designs/2026-06-20-hybrid-script-layer-design.md`. Kept for history only.
+>
 > Bộ công cụ **spec-driven development** dạng **skill Claude Code**. Ưu tiên #1: **spec rõ ràng, KHÔNG phình** (no scope-creep / no gold-plating).
 > File này đủ để implement mà không cần đọc lại chat. Artifacts viết **tiếng Anh** (D8); ghi chú hướng dẫn tiếng Việt.
 > Ngày: 2026-06-14. Namespace lệnh: `/spex:*`.
