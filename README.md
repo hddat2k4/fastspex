@@ -42,13 +42,26 @@ Copy `skills/spex-*` into your skills directory:
 - Global:  `~/.claude/skills/`
 
 ## Use
-1. `/spex:init` — set up `spex/` context (greenfield or brownfield).
+1. `/spex:init` — set up `spex/` context (greenfield or brownfield). Also copies the artifact
+   templates into `spex/templates/` (and, on Claude Code, the helper scripts into `spex/scripts/`)
+   so every later step reads one project-local, editable source.
 2. `/spex:spec` — write a feature spec (approval required).
 3. `/spex:design` — technical design; core inline, heavy detail in `details/` (approval required).
 4. `/spex:tasks` — break into a granular, traceable task checklist (approval required).
 5. `/spex:implement` — build with TDD + scope-guard.
 
-To change context after init, edit the files in `spex/memory/` directly.
+To change context after init, edit the files in `spex/memory/` directly. To tweak an artifact
+template for a project, edit it in `spex/templates/`.
+
+### What `/spex:init` writes into your project
+```
+spex/
+  config.yml            # fastspex:1 · mode · self_review · templates · scripts · docs_source
+  memory/               # product.md · tech.md · structure.md · constitution.md (+ tech-docs/)
+  templates/            # spec.md · design.md · tasks.md · product/tech/structure/constitution
+  scripts/              # bash/ (+ powershell/) — Claude Code only; optional, skills fall back
+  specs/                # one folder per feature (NNN-slug)
+```
 
 ## Principles
 Story + numbered EARS specs · per-requirement "Out of scope" · HARD-GATE at spec, design & tasks · granular requirement tracing · self-review (toggle in `spex/config.yml`) · docs via Context7→WebSearch · YAGNI everywhere.

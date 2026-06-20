@@ -20,3 +20,4 @@ A lean, spec-driven development toolkit for Claude Code.
 - Build ONLY what the spec asks. No extra functions, options, or edge cases.
 - Use Context7 → WebSearch for docs; save focused digests to `spex/memory/tech-docs/`.
 - `self_review` is toggled in `spex/config.yml`.
+- `/spex:init` materializes `spex/templates/` (and, on Claude Code, `spex/scripts/`) so steps and scripts share one project-local source; skills fall back to inline behavior when scripts are absent.
