@@ -1,6 +1,6 @@
 ---
-name: spex-design
-description: Turn an approved spec into a technical design (HOW) — core sections inline, heavy detail summarized and offloaded to details/ via links; pulls docs via Context7/WebSearch; requires approval before /spex:tasks.
+name: design
+description: Turn an approved spec into a technical design (HOW) — core sections inline, heavy detail summarized and offloaded to details/ via links; pulls docs via Context7/WebSearch; requires approval before /tasks.
 ---
 # Fastspex: Design
 
@@ -29,7 +29,7 @@ Decide HOW to build the approved spec. **Keep core sections inline; offload heav
    {
      "questions": [
        {
-         "question": "Approve this design and proceed to /spex:tasks?",
+         "question": "Approve this design and proceed to /tasks?",
          "header": "Design approval",
          "multiSelect": false,
          "options": [
@@ -41,10 +41,10 @@ Decide HOW to build the approved spec. **Keep core sections inline; offload heav
      ]
    }
    ```
-   - On **Approve** (button or token): set design.md status to `approved` and stop. **→ Next: `/spex:tasks`**
+   - On **Approve** (button or token): set design.md status to `approved` and stop. **→ Next: `/tasks`**
    - On **Request changes**: collect the feedback, edit design.md (and any `details/` file), re-save as draft, then re-run the gate.
    - On **Reject**: keep status as `draft` and stop.
-   - If requirement gaps surface, offer to return to /spex:spec.
+   - If requirement gaps surface, offer to return to /spec.
 
 ## Self-review
 If enabled: every requirement is addressed by some component/change; **Testing Strategy present**; no placeholders; no design beyond spec; every `details/` link resolves; no full-detail duplicated inline. Fix inline.

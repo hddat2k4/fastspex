@@ -1,6 +1,6 @@
 ---
-name: spex-tasks
-description: Break an approved design into a granular, traceable task checklist (tasks.md) — two-level decimal checkboxes, per-sub-task granular requirement IDs, kept parallel-safe with [P]. Requires approval before /spex:implement.
+name: tasks
+description: Break an approved design into a granular, traceable task checklist (tasks.md) — two-level decimal checkboxes, per-sub-task granular requirement IDs, kept parallel-safe with [P]. Requires approval before /implement.
 ---
 # Fastspex: Tasks
 
@@ -32,7 +32,7 @@ Convert the design into small, test-driven coding steps. **Core principle: each 
    {
      "questions": [
        {
-         "question": "Approve these tasks and proceed to /spex:implement?",
+         "question": "Approve these tasks and proceed to /implement?",
          "header": "Tasks approval",
          "multiSelect": false,
          "options": [
@@ -44,7 +44,7 @@ Convert the design into small, test-driven coding steps. **Core principle: each 
      ]
    }
    ```
-   - On **Approve** (button or token): set tasks.md status to `approved` and stop. **→ Next: `/spex:implement`**
+   - On **Approve** (button or token): set tasks.md status to `approved` and stop. **→ Next: `/implement`**
    - On **Request changes**: edit tasks.md, re-save as draft, re-run the gate.
    - On **Reject**: keep status as `draft` and stop. Do NOT implement in this phase.
 
@@ -58,4 +58,4 @@ If enabled: every requirement criterion maps to ≥1 sub-task; each `N.M` has it
 | "Cite the whole requirement (R1) is fine" | Cite granular IDs (1.1, 1.6). That's the locked rule. |
 | "Add a task to clean things up" | Not in the design → don't. |
 | "These two tasks can share edits to file X" | Merge them or sequence them — never parallel-edit one file. |
-| "Implement it now while I'm here" | Tasks phase only writes tasks.md. Implementation is /spex:implement. |
+| "Implement it now while I'm here" | Tasks phase only writes tasks.md. Implementation is /implement. |

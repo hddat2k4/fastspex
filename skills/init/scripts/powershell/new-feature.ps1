@@ -10,7 +10,7 @@ for ($i=0; $i -lt $args.Count; $i++) {
 $desc = ($descParts -join ' ').Trim()
 if (-not $desc) { [Console]::Error.WriteLine('error: feature description required'); exit 1 }
 $root = Find-SpexRoot
-if (-not $root) { [Console]::Error.WriteLine('error: spex/ not found (run /spex:init)'); exit 1 }
+if (-not $root) { [Console]::Error.WriteLine('error: spex/ not found (run /init)'); exit 1 }
 $specs = Join-Path $root 'spex\specs'; New-Item -ItemType Directory -Force -Path $specs | Out-Null
 
 $max = 0

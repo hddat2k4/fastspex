@@ -1,6 +1,6 @@
 ---
-name: spex-init
-description: Initialize Fastspex in a project (greenfield or brownfield). Scaffolds spex/, materializes project-local templates/ (and the optional script layer on Claude Code), and generates the memory/ steering set — product.md, tech.md, structure.md, constitution.md. Run once before /spex:spec.
+name: init
+description: Initialize Fastspex in a project (greenfield or brownfield). Scaffolds spex/, materializes project-local templates/ (and the optional script layer on Claude Code), and generates the memory/ steering set — product.md, tech.md, structure.md, constitution.md. Run once before /spec.
 ---
 # Fastspex: Init
 
@@ -80,11 +80,11 @@ Set up the persistent context (steering) a spec-driven workflow needs, stored un
    - **Parallel = yes →** dispatch four subagents concurrently (one message, multiple Task calls): §A→product.md, §B→tech.md, §C→structure.md, §D→constitution.md. Give each the mode + gathered inputs + its file path + its template (`spex/templates/<file>.md`, materialized in step 2b). Every agent: write ONLY its own file, NEVER ask the user, return a 2–3 bullet summary. Distinct files → safe in parallel.
    - **Parallel = no →** run §A–§D yourself, sequentially. Same output.
 5. **Brief & handoff (NO gate).** Print 2–3 bullets per file (what was captured), then:
-   "Review here: `spex/memory/`. To change anything: edit the files directly. **→ Next: `/spex:spec`**" Do not block.
+   "Review here: `spex/memory/`. To change anything: edit the files directly. **→ Next: `/spec`**" Do not block.
 
 ## File specs (each = one agent's job, or one sequential step)
 - **§A product.md** (template). WHAT/WHO, not how. greenfield: gathered answers → Purpose, Target Users, Key Features, Constraints & Non-Goals. brownfield: infer from README / package description / docs, each marked "inferred from …".
-- **§B tech.md** (template). Stack from stated input (greenfield) or parsed manifests (package.json/requirements.txt/go.mod/pom.xml…) (brownfield); record name+version (resolve the Context7 ID too when that source is available). **Eager-distill the CORE libs (step 3)** honoring `docs_source`: Context7 · WebSearch — use the chosen source, fall back if it fails, and if none work save a **pointer (name+version) + note "docs not distilled"** (never block). Non-core stay pointers (lazy). Also fill `## Commands` (dev/build/**test**/lint/migrate) — brownfield: from package.json scripts / Makefile / CI; greenfield: from the stated stack. The test command is required (TDD in /spex:implement runs it). Do NOT duplicate naming (→ structure.md) or style/error rules (→ constitution.md) here.
+- **§B tech.md** (template). Stack from stated input (greenfield) or parsed manifests (package.json/requirements.txt/go.mod/pom.xml…) (brownfield); record name+version (resolve the Context7 ID too when that source is available). **Eager-distill the CORE libs (step 3)** honoring `docs_source`: Context7 · WebSearch — use the chosen source, fall back if it fails, and if none work save a **pointer (name+version) + note "docs not distilled"** (never block). Non-core stay pointers (lazy). Also fill `## Commands` (dev/build/**test**/lint/migrate) — brownfield: from package.json scripts / Makefile / CI; greenfield: from the stated stack. The test command is required (TDD in /implement runs it). Do NOT duplicate naming (→ structure.md) or style/error rules (→ constitution.md) here.
 - **§C structure.md** (template). WHERE code goes. greenfield: propose a folder map + naming + placement rules from the intended stack. brownfield: shallow `tree` (depth 2, ignore node_modules/.git/dist) → annotated Folder Map + Naming Conventions + "where to put new things", each marked "inferred from …".
 - **§D constitution.md** (template). greenfield: gathered answers → 2–5 principles, each name + verifiable rule + one-line rationale. brownfield: infer from lint config/CI/CONTRIBUTING/README, marked with sources. ALWAYS keep the "Scope Discipline" section verbatim.
 

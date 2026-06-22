@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 HERE="$(cd "$(dirname "$0")" && pwd)"
 . "$HERE/lib.sh"
-SCRIPT="$HERE/../../skills/spex-init/scripts/bash/new-feature.sh"
+SCRIPT="$HERE/../../skills/init/scripts/bash/new-feature.sh"
 
 root="$(make_fixture)"; cd "$root"
 

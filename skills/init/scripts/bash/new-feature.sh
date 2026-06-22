@@ -15,7 +15,7 @@ while [ $# -gt 0 ]; do
 done
 [ -n "$DESC" ] || { echo "error: feature description required" >&2; exit 1; }
 
-ROOT="$(find_spex_root)" || { echo "error: spex/ not found (run /spex:init)" >&2; exit 1; }
+ROOT="$(find_spex_root)" || { echo "error: spex/ not found (run /init)" >&2; exit 1; }
 SPECS="$ROOT/spex/specs"; mkdir -p "$SPECS"
 
 max=0

@@ -1,5 +1,5 @@
 ---
-name: spex-implement
+name: implement
 description: Execute tasks.md — TDD per task, scope-guard, tick [x]. Sequential by default with an option to run independent [P] tasks in parallel. Verify tests before claiming done.
 ---
 # Fastspex: Implement
@@ -41,7 +41,7 @@ Build exactly what the tasks say. **Core principle (scope-guard): code only what
 4. **Scope-guard:** implement only the task and the granular criteria its `_Requirements: N.M_` cites (look them up in spec.md). No "while I'm here" refactors, no extra options.
 5. **Docs:** use tech-docs/; if a needed digest is missing → resolve via `docs_source` (Context7 · WebSearch; fall back if it fails, else pointer) → save.
 6. **Self-review + verify:** if enabled, confirm code matches task/spec with nothing extra; then RUN the tests and read output before claiming anything passes.
-7. Feature done when all tasks are `[x]`. **→ Next: feature complete — start the next with `/spex:spec`.**
+7. Feature done when all tasks are `[x]`. **→ Next: feature complete — start the next with `/spec`.**
 
 ## Red flags — STOP if you think
 | Thought | Reality |

@@ -1,6 +1,6 @@
 $ErrorActionPreference = 'Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
-$ps   = Join-Path $here '..\..\skills\spex-init\scripts\powershell'
+$ps   = Join-Path $here '..\..\skills\init\scripts\powershell'
 $pass = 0; $fail = 0
 function Assert-Eq($a,$b,$m){ if($a -eq $b){$script:pass++} else {$script:fail++; Write-Host "FAIL: $m - expected [$b] got [$a]"} }
 

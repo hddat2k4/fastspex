@@ -1,6 +1,6 @@
 ---
-name: spex-spec
-description: Write a clear feature spec (Introduction + Glossary + numbered EARS requirements with Priority + per-requirement Out of scope) before design. Drafts requirements, marks ambiguities, then requires approval before /spex:design.
+name: spec
+description: Write a clear feature spec (Introduction + Glossary + numbered EARS requirements with Priority + per-requirement Out of scope) before design. Drafts requirements, marks ambiguities, then requires approval before /design.
 ---
 # Fastspex: Spec
 
@@ -8,7 +8,7 @@ description: Write a clear feature spec (Introduction + Glossary + numbered EARS
 Turn one feature request into a testable WHAT/WHY spec. **Core principle: every requirement traces to the request; cut everything else.**
 
 ## When to use
-- After /spex:init, to define a single feature/change. One spec = one feature.
+- After /init, to define a single feature/change. One spec = one feature.
 
 ## Flow
 0. **Locate feature & load steering context.** If `spex/scripts/` exists and a shell is
@@ -36,7 +36,7 @@ Turn one feature request into a testable WHAT/WHY spec. **Core principle: every 
      {
        "questions": [
          {
-           "question": "Approve this spec and proceed to /spex:design?",
+           "question": "Approve this spec and proceed to /design?",
            "header": "Spec approval",
            "multiSelect": false,
            "options": [
@@ -58,7 +58,7 @@ Turn one feature request into a testable WHAT/WHY spec. **Core principle: every 
            "multiSelect": false,
            "options": [
              { "label": "Answer clarifications now", "description": "I'll ask each [NEEDS CLARIFICATION] one by one" },
-             { "label": "Approve anyway", "description": "Accept assumptions and proceed to /spex:design" },
+             { "label": "Approve anyway", "description": "Accept assumptions and proceed to /design" },
              { "label": "Request changes", "description": "Describe broader changes, then revise" }
            ]
          }
@@ -66,7 +66,7 @@ Turn one feature request into a testable WHAT/WHY spec. **Core principle: every 
      }
      ```
      If the user chooses "Answer clarifications now", use `AskUserQuestion` for each marker with a free-text option or the relevant choices. Apply answers, remove resolved markers, re-save, then re-present the gate.
-   - On **Approve** (button or token): set spec.md status to `approved` and stop. **→ Next: `/spex:design`**
+   - On **Approve** (button or token): set spec.md status to `approved` and stop. **→ Next: `/design`**
    - On **Request changes**: collect the feedback, edit the spec, re-save as draft, then re-run the gate.
    - On **Reject**: keep status as `draft` and stop.
 

@@ -12,7 +12,7 @@ Cross-tool install via the open [`skills`](https://github.com/vercel-labs/skills
 npx skills add https://github.com/hddat2k4/fastspex
 
 # A single skill
-npx skills add https://github.com/hddat2k4/fastspex --skill spex-init
+npx skills add https://github.com/hddat2k4/fastspex --skill init
 
 # Pick a specific agent and install globally
 npx skills add https://github.com/hddat2k4/fastspex --agent codex --global
@@ -37,23 +37,23 @@ Or inside a Claude Code session:
 
 ### Manual install
 
-Copy `skills/spex-*` into your skills directory:
+Copy the skill folders (`init`, `spec`, `design`, `tasks`, `implement`) into your skills directory:
 - Project: `.claude/skills/`
 - Global:  `~/.claude/skills/`
 
 ## Use
-1. `/spex:init` — set up `spex/` context (greenfield or brownfield). Also copies the artifact
+1. `/init` — set up `spex/` context (greenfield or brownfield). Also copies the artifact
    templates into `spex/templates/` (and, on Claude Code, the helper scripts into `spex/scripts/`)
    so every later step reads one project-local, editable source.
-2. `/spex:spec` — write a feature spec (approval required).
-3. `/spex:design` — technical design; core inline, heavy detail in `details/` (approval required).
-4. `/spex:tasks` — break into a granular, traceable task checklist (approval required).
-5. `/spex:implement` — build with TDD + scope-guard.
+2. `/spec` — write a feature spec (approval required).
+3. `/design` — technical design; core inline, heavy detail in `details/` (approval required).
+4. `/tasks` — break into a granular, traceable task checklist (approval required).
+5. `/implement` — build with TDD + scope-guard.
 
 To change context after init, edit the files in `spex/memory/` directly. To tweak an artifact
 template for a project, edit it in `spex/templates/`.
 
-### What `/spex:init` writes into your project
+### What `/init` writes into your project
 ```
 spex/
   config.yml            # fastspex:1 · mode · self_review · templates · scripts · docs_source
@@ -64,9 +64,9 @@ spex/
 ```
 
 ### Optional script layer (Claude Code)
-On Claude Code, `/spex:init` copies tiny helper scripts to `spex/scripts/` (bash + PowerShell)
+On Claude Code, `/init` copies tiny helper scripts to `spex/scripts/` (bash + PowerShell)
 that make feature numbering and the spec→design→tasks→implement **gates deterministic**
-(exit-code `check`). Each `/spex:*` step also ends with a `→ Next:` handoff so the workflow
+(exit-code `check`). Each step also ends with a `→ Next:` handoff so the workflow
 is self-routing. On any other agent the scripts are simply absent and every command runs the
 same logic inline — no behavior change, no runtime required.
 

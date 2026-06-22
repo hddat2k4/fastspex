@@ -12,12 +12,12 @@ inclusion: always
 
 ## Docs policy
 - Sources: pick set by `config.yml: docs_source`; fallback Context7 → WebSearch/WebFetch.
-- In /spex:design & /spex:implement: query by ID at the pinned version → distill ONLY what's used → save tech-docs/<lib>.md.
+- In /design & /implement: query by ID at the pinned version → distill ONLY what's used → save tech-docs/<lib>.md.
 - Do NOT dump full docs. Keep digests focused on the APIs actually used.
 - CORE libs distilled eagerly at init; the rest are lazy.
 
 ## Commands
-> How to run the project. The TEST command is required — /spex:implement's TDD loop runs it.
+> How to run the project. The TEST command is required — /implement's TDD loop runs it.
 ```bash
 # dev:      <run locally>
 # build:    <build>
