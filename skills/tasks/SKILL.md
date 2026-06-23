@@ -36,17 +36,15 @@ Convert the design into small, test-driven coding steps. **Core principle: each 
          "header": "Tasks approval",
          "multiSelect": false,
          "options": [
-           { "label": "Approve", "description": "Set status: approved and continue" },
-           { "label": "Request changes", "description": "Describe what to change, then revise" },
-           { "label": "Reject and stop", "description": "Keep as draft, do not implement" }
+           { "label": "Approve", "description": "Set status: approved; I'll then suggest /implement without running it" },
+           { "label": "Request changes", "description": "Describe what to change, then I revise and re-gate" }
          ]
        }
      ]
    }
    ```
-   - On **Approve** (button or token): set tasks.md status to `approved` and stop. **→ Next: `/implement`**
-   - On **Request changes**: edit tasks.md, re-save as draft, re-run the gate.
-   - On **Reject**: keep status as `draft` and stop. Do NOT implement in this phase.
+   - On **Approve** (button or token): set tasks.md status to `approved`, stop, and state **→ Next: `/implement`** — suggest it **without running it**.
+   - On **Request changes**: edit tasks.md, re-save as draft, then re-run the gate.
 
 ## Self-review
 If enabled: every requirement criterion maps to ≥1 sub-task; each `N.M` has its OWN granular `_Requirements:_`; no orphan task beyond spec/design; no two parallel tasks touch the same file; dependencies minimal and correct. Fix inline.

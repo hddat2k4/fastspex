@@ -39,7 +39,14 @@ Build exactly what the tasks say. **Core principle (scope-guard): code only what
    - If no `[P]` markers exist, default to sequential and skip the question.
 3. **Per task (TDD):** write the failing test → run it (see it fail) → minimal implementation → run tests (pass) → tick `[x]`. Use the test command from `tech.md` `## Commands`.
 4. **Scope-guard:** implement only the task and the granular criteria its `_Requirements: N.M_` cites (look them up in spec.md). No "while I'm here" refactors, no extra options.
-5. **Docs:** use tech-docs/; if a needed digest is missing → resolve via `docs_source` (Context7 · WebSearch; fall back if it fails, else pointer) → save.
+5. **Docs:** use tech-docs/; if a needed digest is missing →
+
+   **Doc-source resolution** (run for each digest to distill):
+   1. If the **Context7** MCP is available → use Context7.
+   2. Else if **ContextHub** is installed (`contexthub_install: installed` in `spex/config.yml` and `chub-mcp` reachable) → use ContextHub.
+   3. Else if `contexthub_install` is `unknown` → ask the user ONCE with a binary `AskUserQuestion` ("Install ContextHub for better API docs?", recommended option first): on **Yes** run `spex/scripts/bash/install-contexthub.sh` (POSIX) or `spex/scripts/powershell/install-contexthub.ps1` (Windows), then on success set `contexthub_install: installed` and use ContextHub; on **No** set `contexthub_install: declined`.
+   4. Else → use **WebSearch / WebFetch**.
+   If a chosen source fails at query time, fall to the next tier; if every tier fails, save a name+version pointer noting "docs not distilled". Never block.
 6. **Self-review + verify:** if enabled, confirm code matches task/spec with nothing extra; then RUN the tests and read output before claiming anything passes.
 7. Feature done when all tasks are `[x]`. **→ Next: feature complete — start the next with `/spec`.**
 

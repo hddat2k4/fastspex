@@ -14,26 +14,9 @@ Set up the persistent context (steering) a spec-driven workflow needs, stored un
 1. **Auto-detect mode.** Inspect the repo before asking anything:
    - **brownfield** if any of: manifest files (`package.json`, `requirements.txt`, `go.mod`, `pom.xml`, `build.gradle`, `Cargo.toml`, `Gemfile`, `composer.json`, …), source folders (`src/`, `app/`, `lib/`, `packages/`, `tests/`, …), or a `.git/` directory with commits.
    - **greenfield** otherwise (empty repo, only README, no manifests/source).
-   - Use `AskUserQuestion` to confirm one choice:
-     ```json
-     {
-       "questions": [
-         {
-           "question": "I detected this as a {mode} project. Is that correct?",
-           "header": "Project mode",
-           "multiSelect": false,
-           "options": [
-             { "label": "Yes, proceed as detected", "description": "Continue with {mode}" },
-             { "label": "No, switch to greenfield", "description": "Empty/new project" },
-             { "label": "No, switch to brownfield", "description": "Existing codebase" }
-           ]
-         }
-       ]
-     }
-     ```
-   - Save final mode to `spex/config.yml` (`mode: greenfield | brownfield`).
+   - Auto-detect and PROCEED with the detected mode — do NOT ask the user to confirm. Save the detected mode to `spex/config.yml` (`mode: greenfield | brownfield`).
 2. **Scaffold (do not clobber).** If `spex/` exists → stop and offer update / re-init / abort. Else create:
-   `spex/memory/`, `spex/memory/tech-docs/`, `spex/specs/`, `spex/templates/`, and `spex/config.yml` (`fastspex:1`, `mode`, `created`, `self_review: true`, `templates`, `scripts`, `docs_source`).
+   `spex/memory/`, `spex/memory/tech-docs/`, `spex/specs/`, `spex/templates/`, and `spex/config.yml` (`fastspex:1`, `mode`, `created`, `self_review: true`, `templates`, `scripts`, `contexthub_install: unknown`).
 2b. **Materialize templates + script layer (project-local, do not clobber).** Copy the bundled
    artifact templates from `${CLAUDE_SKILL_DIR}/templates/` → `spex/templates/` so the spec/design/tasks
    skills AND the helper scripts share ONE project-editable source. Set `templates: true` in `config.yml`
@@ -43,23 +26,6 @@ Set up the persistent context (steering) a spec-driven workflow needs, stored un
 3. **Gather inputs, then offer parallel.** Subagents CANNOT ask the user, so collect everything the generators need first:
    - greenfield: ask the lean question sets up front — **product** (purpose+who · 3–5 MVP features · out of scope) · **tech** (intended stack) · **structure** (intended folder layout / naming) · **constitution** (language/style · test policy · non-negotiables).
    - brownfield: nothing to ask yet (generators read the repo), but parse manifests and **confirm the short CORE-libs set** here (the one human-in-loop step tech needs).
-   - both modes: ask the **doc source** for distillation with `AskUserQuestion`:
-     ```json
-     {
-       "questions": [
-         {
-           "question": "Choose the primary doc source for tech library digests.",
-           "header": "Doc source",
-           "multiSelect": false,
-           "options": [
-             { "label": "Context7 (MCP)", "description": "Most accurate; requires the Context7 MCP server" },
-             { "label": "WebSearch / WebFetch", "description": "No MCP required; broadest reach, lower precision" }
-           ]
-         }
-       ]
-     }
-     ```
-     Save choice to `config.yml: docs_source`. Any choice still falls back if it fails.
    - Then ask ONE `AskUserQuestion` confirm for parallel generation:
      ```json
      {
@@ -80,11 +46,18 @@ Set up the persistent context (steering) a spec-driven workflow needs, stored un
    - **Parallel = yes →** dispatch four subagents concurrently (one message, multiple Task calls): §A→product.md, §B→tech.md, §C→structure.md, §D→constitution.md. Give each the mode + gathered inputs + its file path + its template (`spex/templates/<file>.md`, materialized in step 2b). Every agent: write ONLY its own file, NEVER ask the user, return a 2–3 bullet summary. Distinct files → safe in parallel.
    - **Parallel = no →** run §A–§D yourself, sequentially. Same output.
 5. **Brief & handoff (NO gate).** Print 2–3 bullets per file (what was captured), then:
-   "Review here: `spex/memory/`. To change anything: edit the files directly. **→ Next: `/spec`**" Do not block.
+   "Detected mode: <mode> — edit `spex/config.yml` if that's wrong. Review here: `spex/memory/`. To change anything: edit the files directly. **→ Next: `/spec`**" Do not block.
 
 ## File specs (each = one agent's job, or one sequential step)
 - **§A product.md** (template). WHAT/WHO, not how. greenfield: gathered answers → Purpose, Target Users, Key Features, Constraints & Non-Goals. brownfield: infer from README / package description / docs, each marked "inferred from …".
-- **§B tech.md** (template). Stack from stated input (greenfield) or parsed manifests (package.json/requirements.txt/go.mod/pom.xml…) (brownfield); record name+version (resolve the Context7 ID too when that source is available). **Eager-distill the CORE libs (step 3)** honoring `docs_source`: Context7 · WebSearch — use the chosen source, fall back if it fails, and if none work save a **pointer (name+version) + note "docs not distilled"** (never block). Non-core stay pointers (lazy). Also fill `## Commands` (dev/build/**test**/lint/migrate) — brownfield: from package.json scripts / Makefile / CI; greenfield: from the stated stack. The test command is required (TDD in /implement runs it). Do NOT duplicate naming (→ structure.md) or style/error rules (→ constitution.md) here.
+- **§B tech.md** (template). Stack from stated input (greenfield) or parsed manifests (package.json/requirements.txt/go.mod/pom.xml…) (brownfield); record name+version (resolve the Context7 ID too when that source is available). **Eager-distill the CORE libs (step 3)** using the doc-source resolution below. Non-core stay pointers (lazy). Also fill `## Commands` (dev/build/**test**/lint/migrate) — brownfield: from package.json scripts / Makefile / CI; greenfield: from the stated stack. The test command is required (TDD in /implement runs it). Do NOT duplicate naming (→ structure.md) or style/error rules (→ constitution.md) here.
+
+  **Doc-source resolution** (run for each digest to distill):
+  1. If the **Context7** MCP is available → use Context7.
+  2. Else if **ContextHub** is installed (`contexthub_install: installed` in `spex/config.yml` and `chub-mcp` reachable) → use ContextHub.
+  3. Else if `contexthub_install` is `unknown` → ask the user ONCE with a binary `AskUserQuestion` ("Install ContextHub for better API docs?", recommended option first): on **Yes** run `spex/scripts/bash/install-contexthub.sh` (POSIX) or `spex/scripts/powershell/install-contexthub.ps1` (Windows), then on success set `contexthub_install: installed` and use ContextHub; on **No** set `contexthub_install: declined`.
+  4. Else → use **WebSearch / WebFetch**.
+  If a chosen source fails at query time, fall to the next tier; if every tier fails, save a name+version pointer noting "docs not distilled". Never block.
 - **§C structure.md** (template). WHERE code goes. greenfield: propose a folder map + naming + placement rules from the intended stack. brownfield: shallow `tree` (depth 2, ignore node_modules/.git/dist) → annotated Folder Map + Naming Conventions + "where to put new things", each marked "inferred from …".
 - **§D constitution.md** (template). greenfield: gathered answers → 2–5 principles, each name + verifiable rule + one-line rationale. brownfield: infer from lint config/CI/CONTRIBUTING/README, marked with sources. ALWAYS keep the "Scope Discipline" section verbatim.
 

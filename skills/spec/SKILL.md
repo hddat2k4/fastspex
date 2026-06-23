@@ -31,7 +31,8 @@ Turn one feature request into a testable WHAT/WHY spec. **Core principle: every 
 4. **Mark ambiguity** inline with `[NEEDS CLARIFICATION: …]` — **max 3**, prioritized by impact. Do not start a Q&A; draft first, let the user comment.
 5. **Save** the spec body into the feature dir from Step 0, as `spec.md` (status: draft).
 6. **HARD-GATE.** Prefer `AskUserQuestion`; a typed approval token (`approved` / `looks good` / `yes` / `lgtm` / `ok proceed`, case-insensitive) is ALSO accepted for portability to non-Claude agents. Present the spec for approval or targeted clarification:
-   - If there are no `[NEEDS CLARIFICATION]` markers:
+   - If there ARE `[NEEDS CLARIFICATION]` markers: ask each one **directly** with `AskUserQuestion` — phrase the actual question and give concrete answer options, listing the **recommended** option FIRST (label it "(Recommended)"). Apply the chosen answer, remove that resolved marker, re-save the spec, and repeat for the next marker. When all markers are resolved, present the binary approval gate below. Do NOT show a meta-prompt asking whether to answer or accept assumptions.
+   - When there are no remaining `[NEEDS CLARIFICATION]` markers, present the binary approval gate:
      ```json
      {
        "questions": [
@@ -40,35 +41,15 @@ Turn one feature request into a testable WHAT/WHY spec. **Core principle: every 
            "header": "Spec approval",
            "multiSelect": false,
            "options": [
-             { "label": "Approve", "description": "Set status: approved and continue" },
-             { "label": "Request changes", "description": "Describe what to change, then revise" },
-             { "label": "Reject and stop", "description": "Keep as draft, do not design" }
+             { "label": "Approve", "description": "Set status: approved; I'll then suggest /design without running it" },
+             { "label": "Request changes", "description": "Describe what to change, then I revise and re-gate" }
            ]
          }
        ]
      }
      ```
-   - If there ARE clarification markers, expand the question to surface them:
-     ```json
-     {
-       "questions": [
-         {
-           "question": "This spec has {N} open clarification(s). What would you like to do?",
-           "header": "Spec approval",
-           "multiSelect": false,
-           "options": [
-             { "label": "Answer clarifications now", "description": "I'll ask each [NEEDS CLARIFICATION] one by one" },
-             { "label": "Approve anyway", "description": "Accept assumptions and proceed to /design" },
-             { "label": "Request changes", "description": "Describe broader changes, then revise" }
-           ]
-         }
-       ]
-     }
-     ```
-     If the user chooses "Answer clarifications now", use `AskUserQuestion` for each marker with a free-text option or the relevant choices. Apply answers, remove resolved markers, re-save, then re-present the gate.
-   - On **Approve** (button or token): set spec.md status to `approved` and stop. **→ Next: `/design`**
+   - On **Approve** (button or typed token): set spec.md status to `approved`, stop, and state **→ Next: `/design`** — suggest it **without running it**.
    - On **Request changes**: collect the feedback, edit the spec, re-save as draft, then re-run the gate.
-   - On **Reject**: keep status as `draft` and stop.
 
 ## Notation rules
 - EARS patterns: Event `WHEN … THE SYSTEM SHALL …` · Ubiquitous `THE SYSTEM SHALL …` · State `WHILE … THE SYSTEM SHALL …` · Unwanted `IF … THEN THE SYSTEM SHALL …` · Optional `WHERE … THE SYSTEM SHALL …` · Precondition `GIVEN … WHEN … THEN …`.
